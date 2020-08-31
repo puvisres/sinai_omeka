@@ -1,0 +1,71 @@
+---
+- name: test if mysql_bind_address is set correctly
+  assert:
+    that:
+      - mysql_bind_address is defined
+      - mysql_bind_address | length > 0
+    quiet: yes
+
+- name: test if mysql_root_password is set correctly
+  assert:
+    that:
+      - mysql_root_password is defined
+      - mysql_root_password | length > 0
+    quiet: yes
+
+- name: mariadbserver | install mariadbserver
+  package:
+    name: "{{ mariadbserver_packages }}"
+    state: present
+
+- name: mariadbserver | configure mariadbserver
+  ini_file:
+    dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    mode: "0644"
+  loop: "{{ mysql_configuration_options }}"
+  loop_control:
+    label: "{{ item.option }}"
+  notify:
+    - restart mysql server
+
+- name: mariadbserver | start and enable mysql service
+  service:
+    name: "{{ mysql_service }}"
+    state: started
+    enabled: yes
+
+- name: mariadbserver | create databases
+  mysql_db:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default('present') }}"
+    target: "{{ item.target | default(omit) }}"
+    encoding: "{{ item.encoding | default(omit) }}"
+    collation: "{{ item.collation | default(omit) }}"
+    login_unix_socket: "{{ mysql_socket }}"
+  loop: "{{ mysql_databases }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when:
+    - mysql_databases is defined
+
+- name: mariadbserver | create users
+  mysql_user:
+    name: "{{ item.name }}"
+    state: present
+    password: "{{ item.password | default(omit) }}"
+    priv: "{{ item.priv | default(omit) }}"
+    host: "{{ item.host | default(omit) }}"
+    update_password: on_create
+    login_unix_socket: "{{ mysql_socket }}"
+  loop: "{{ mysql_users }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when:
+    - mysql_users is defined
+  no_log: yes
+
+- name: flush handlers
+  meta: flush_handlers
