@@ -1,0 +1,9 @@
+---
+- hosts: all
+  remote_user: pulsys
+  become: true
+  vars_files:
+    - ../group_vars/gcp/dev.yml
+    - ../group_vars/mariadbserver/dev.yml
+  roles:
+    - role: ../roles/mariadb_server

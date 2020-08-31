@@ -31,6 +31,14 @@
   notify:
     - restart mysql server
 
+- name: mariadbserver | initialize mysql
+  command: "{{ mysql_initialize_command }}"
+  args:
+    creates: /var/lib/mysql/mysql
+
+- name: flush handlers
+  meta: flush_handlers
+
 - name: mariadbserver | start and enable mysql service
   service:
     name: "{{ mysql_service }}"

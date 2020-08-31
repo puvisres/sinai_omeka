@@ -1,12 +1,12 @@
 ---
-mariadb_packages:
+mariadbserver_packages:
   - mariadb-server
-  - mariadb-devel
+  - libmariadb-dev
   - python3-mysqldb
-mysql_initialize_command: mysql
-mysql_service: mysql
-mysql_socket: /var/run/mysql/mysql.sock
-mysql_pid: /var/run/mysql/mysql.pid
+mysql_initialize_command: mysql_install_db
+mysql_service: mariadb
+mysql_socket: /var/run/mysqld/mysql.sock
+mysql_pid: /var/run/mysqld/mysql.pid
 mysql_configuration_options:
   - option: bind-address
     section: mysqld
