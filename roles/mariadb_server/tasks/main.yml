@@ -1,0 +1,187 @@
+---
+- name: test if mysql_bind_address is set correctly
+  assert:
+    that:
+      - mysql_bind_address is defined
+      - mysql_bind_address | length > 0
+    quiet: true
+
+- name: test if mysql_root_password is set correctly
+  assert:
+    that:
+      - mysql_root_password is defined
+      - mysql_root_password | length > 0
+    quiet: true
+
+- name: mariadbserver | Check for existence of /root/.my.cnf
+  stat:
+    path: "/root/.my.cnf"
+  register: root_my_cnf
+
+- name: mariadbserver | Fail when /root/.my.cnf doesn't exist, and no root password has been provided
+  fail:
+    msg: Could not read password from /root/.my.cnf. If this is the first time running your playbook, append `  --extra-vars mysql_root_password=$(openssl rand -base64 24) `  to your command line. Setting the mysql root password only needs to be done once.
+  when: root_my_cnf is defined
+    and root_my_cnf.stat is defined
+    and root_my_cnf.stat.exists == False
+    and mysql_root_password is not defined
+
+- name: mariadbserver | install mariadbserver
+  apt:
+    name: "{{ mariadbserver_packages }}"
+    state: present
+
+- name: mariadbserver | Install python module
+  apt:
+    name: python-mysqldb
+    state: present
+
+- block:
+    - name: Ensure mysql is running and starts on boot
+      service:
+        name: mysql
+        state: started
+        enabled: true
+
+    - name: Get list of hosts for the anonymous user.
+      command: mysql -NBe 'SELECT Host FROM mysql.user WHERE User = ""'
+      register: mysql_anonymous_hosts
+      changed_when: false
+      check_mode: false
+
+    - name: Remove anonymous MySQL users.
+      mysql_user:
+         name: ""
+         host: "{{ item }}"
+         state: absent
+      with_items: "{{ mysql_anonymous_hosts.stdout_lines|default([]) }}"
+
+    - name: Remove the test database
+      mysql_db:
+        name: test
+        state: absent
+
+    - name: Override default bind address
+      copy:
+        dest: "{{ mysql_include_dir }}/99-visres-bind-address.cnf"
+        content: |
+          [mysqld]
+          bind-address = {{ mysql_bind_address }}
+        force: true
+        owner: root
+        group: root
+        mode: 0644
+        backup: false
+      when: mysql_bind_address != '127.0.0.1'
+      notify:
+        - restart mysql server
+
+    - debug:
+        var: mysql_allow_from
+
+    - name: Give mysql root permission to run commands from places other than localhost (mysql_allow_from = scalar)
+      mysql_user:
+        name: "{{ mysql_user }}"
+        priv: "*.*:ALL,GRANT"
+        append_privs: true
+        state: present
+        password: '{{ mysql_root_password }}'
+        host: '{{ mysql_allow_from }}'
+      when: mysql_root_password is defined
+        and mysql_root_password|trim != ''
+        and mysql_allow_from is string
+        and mysql_allow_from != 'localhost'
+
+    - name: Give mysql root permission to run commands from places other than localhost  (mysql_allow_from = list)
+      mysql_user:
+        name: "{{ mysql_user }}"
+        priv: "*.*:ALL,GRANT"
+        append_privs: true
+        state: present
+        password: '{{ mysql_root_password }}'
+        host: '{{ item }}'
+      when: mysql_root_password is defined
+        and mysql_root_password|trim != ''
+        and mysql_allow_from is iterable
+        and (not mysql_allow_from is string)
+        and mysql_allow_from |length > 0
+      with_items: "{{ mysql_allow_from }}"
+
+
+    - name: Update mysql root password
+      mysql_user:
+        name: "{{ mysql_user }}"
+        host: "{{ item }}"
+        password: "{{ mysql_root_password }}"
+      with_items:
+        - "{{ ansible_fqdn }}"
+        - 127.0.0.1
+        - ::1
+        - localhost
+      when: (root_my_cnf is defined
+        and root_my_cnf.stat is defined
+        and root_my_cnf.stat.exists == False)
+        or mysql_root_password is defined
+      register: mysql_password_changed
+
+- name: mariadbserver | Save mysql root password credentials to /root/.my.cnf
+  template:
+    src: root/my.cnf.j2
+    dest: "/root/.my.cnf"
+    owner: root
+    mode: 0600
+    backup: true
+  when: (
+      mysql_password_changed is defined
+      and mysql_password_changed is changed
+    )
+
+- name: mariadbserver | Apply MariaDB server customizations
+  template:
+    src: etc/mysql/mariadb.conf.d/99-visres-server-overrides.cnf.j2
+    dest: "{{ mysql_include_dir }}/99-visres-server-overrides.cnf"
+    owner: root
+    group: root
+    mode: 0644
+    backup: true
+  notify:
+    - restart mysql server
+
+- name: mariadbserver | start and enable mysql service
+  service:
+    name: "{{ mysql_service }}"
+    state: started
+    enabled: yes
+
+- name: mariadbserver | create databases
+  mysql_db:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default('present') }}"
+    target: "{{ item.target | default(omit) }}"
+    encoding: "{{ item.encoding | default(omit) }}"
+    collation: "{{ item.collation | default(omit) }}"
+    login_unix_socket: "{{ mysql_socket }}"
+  loop: "{{ mysql_databases }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when:
+    - mysql_databases is defined
+
+- name: mariadbserver | create users
+  mysql_user:
+    name: "{{ item.name }}"
+    state: present
+    password: "{{ item.password | default(omit) }}"
+    priv: "{{ item.priv | default(omit) }}"
+    host: "{{ item.host | default(omit) }}"
+    update_password: on_create
+    login_unix_socket: "{{ mysql_socket }}"
+  loop: "{{ mysql_users }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when:
+    - mysql_users is defined
+  no_log: yes
+
+- name: flush handlers
+  meta: flush_handlers

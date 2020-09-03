@@ -1,0 +1,4 @@
+---
+mysql_bind_address: "10.0.10.21"
+mysql_root_password: "{{ mariadb_root_password }}"
+mysql_allow_from: "10.0.10.22"
