@@ -1,0 +1,18 @@
+---
+- name: php | install php
+  package:
+    name: "{{ php_packages }}"
+    state: present
+
+- name: php | configure php
+  ini_file:
+    dest: "{{ php_ini_location }}"
+    section: "{{ item.value.section }}"
+    option: "{{ item.key }}"
+    value: "{{ item.value.value }}"
+    mode: "0644"
+  with_dict: "{{ php_settings }}"
+  notify:
+    - restart httpd
+  loop_control:
+    label: "{{ item.key }}"

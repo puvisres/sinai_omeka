@@ -1,0 +1,9 @@
+---
+omeka_required:
+  - imagemagick
+  - php-pdo-mysql
+  - php-xml
+  - php-imagick
+  - unzip
+web_root: "/var/www/html"
+omeka_web_root: "/var/www"

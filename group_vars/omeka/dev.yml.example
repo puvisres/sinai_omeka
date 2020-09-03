@@ -1,0 +1,18 @@
+---
+httpd_vhosts:
+  - name: vrcomekadev
+    servername: vrcomekadev.pulcloud.io
+    documentroot: "{{ vrcomekadev_home }}"
+  - name: visresdemo
+    servername: visresdemo.pulcloud.io
+    documentroot: "{{ visresdemo_home }}"
+
+vrcomekadev_home: "/var/www/html/vrcomekadev"
+visresdemo_home: "/var/www/html/visresdemo"
+
+omeka_db: vrcomeka_db
+omeka_password:
+omeka_user:
+  - vrcomeka_user
+  - visresdemo_user
+omeka_host: 10.0.10.21

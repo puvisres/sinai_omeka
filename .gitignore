@@ -3,3 +3,6 @@ group_vars/gcp/dev.yml
 
 # do not commit the mariadbserver
 group_vars/mariadbserver/dev.yml
+# do not commit omeka dev
+group_vars/omeka/dev.yml
+

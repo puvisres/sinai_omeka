@@ -1,0 +1,9 @@
+---
+- name: test httpd configuration validity
+  command: "{{ httpd_binary }} -t"
+  changed_when: no
+
+- name: restart httpd
+  service:
+    name: "{{ httpd_service }}"
+    state: restarted

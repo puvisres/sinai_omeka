@@ -1,0 +1,3 @@
+---
+php_packages: "php"
+php_ini_location: "/etc/php.ini"
