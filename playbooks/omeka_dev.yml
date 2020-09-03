@@ -5,6 +5,7 @@
   vars_files:
     - ../group_vars/gcp/dev.yml
     - ../group_vars/mariadbserver/dev.yml
+    - ../group_vars/omeka/dev.yml
   roles:
     - role: ../roles/mariadb_server
 

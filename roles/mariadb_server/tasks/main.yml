@@ -160,7 +160,8 @@
     target: "{{ item.target | default(omit) }}"
     encoding: "{{ item.encoding | default(omit) }}"
     collation: "{{ item.collation | default(omit) }}"
-    login_unix_socket: "{{ mysql_socket }}"
+    #    login_unix_socket: "{{ mysql_socket }}"
+    login_host: "{{ omeka_db_host }}"
   loop: "{{ mysql_databases }}"
   loop_control:
     label: "{{ item.name }}"
@@ -175,7 +176,7 @@
     priv: "{{ item.priv | default(omit) }}"
     host: "{{ item.host | default(omit) }}"
     update_password: on_create
-    login_unix_socket: "{{ mysql_socket }}"
+    #    login_unix_socket: "{{ mysql_socket }}"
   loop: "{{ mysql_users }}"
   loop_control:
     label: "{{ item.name }}"

@@ -10,9 +10,18 @@ httpd_vhosts:
 vrcomekadev_home: "/var/www/html/vrcomekadev"
 visresdemo_home: "/var/www/html/visresdemo"
 
-omeka_db: vrcomeka_db
-omeka_password:
-omeka_user:
-  - vrcomeka_user
-  - visresdemo_user
-omeka_host: 10.0.10.21
+omeka_db: "{{ vrcomeka_db }}"
+omeka_password: "{{ vrcomeka_password }}"
+omeka_user: "{{ vrcomeka_user }}"
+omeka_db_host: 10.0.10.21
+
+mysql_allow_from: 10.0.10.22
+
+mysql_databases:
+  - name: "{{ omeka_db }}"
+    encoding: utf8
+    collation: utf8_bin
+mysql_users:
+  - name: "{{ omeka_user }}"
+    password: "{{ omeka_password }}"
+    priv: "{{ omeka_db }}.*.ALL"
