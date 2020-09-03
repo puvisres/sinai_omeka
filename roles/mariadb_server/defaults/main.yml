@@ -4,3 +4,30 @@ mysql_bind_address: 127.0.0.1
 
 # The password to set for the root user. Also stored in my.cnf
 mysql_root_password: "change_me"
+
+# Defaults for /etc/.my.cnf template
+mysql_user: root
+mysql_host_address: localhost
+mysql_port: 3306
+
+# This Can be either a string or a list.
+mysql_allow_from: []
+
+# Had to override this to "/etc/mysql/conf.d"
+mysql_include_dir: /etc/mysql/mariadb.conf.d
+
+# General settings
+mysql_max_allowed_packet: '64M'
+mysql_max_connections: 100
+
+# Both of these values are set for faster row lock handling out of the box. They are not the mysql / mariadb defaults.
+mysql_transaction_isolation: 'READ-COMMITTED'
+mysql_binlog_format: 'ROW'
+
+# Logs
+mysql_expire_logs_days: 10
+mysql_general_log_file: /var/log/mysql/mysql.log
+mysql_general_log: 0
+mysql_slow_query_log: 0
+mysql_slow_query_log_file: /var/log/mysql/mariadb-slow.log
+mysql_long_query_time: 10
