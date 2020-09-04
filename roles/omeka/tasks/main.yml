@@ -10,7 +10,7 @@
     state: present
     name: rewrite
   notify:
-    - restart httpd
+    - restart apache
 
 - name: omeka | register downloaded
   stat:
@@ -40,4 +40,12 @@
 - name: omeka | create {{ vrcomeka }} config
   template:
     src: database.ini.j2
-    dest: "{{ vrcomekadev_home }}/config/database.ini"
+    dest: "{{ vrcomekadev_home }}/omeka-s/config/database.ini"
+
+- name: omeka | grant permissions for file directory
+  file:
+    path: "{{ vrcomekadev_home }}/omeka-s/files"
+    owner: "www-data"
+    group: "www-data"
+  notify:
+    - restart apache

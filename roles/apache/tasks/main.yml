@@ -1,53 +1,34 @@
 ---
-- name: apache | install apache
-  package:
-    name: "{{ httpd_packages }}"
+
+- name: ensure required packages are present
+  apt:
+    name: ['apache2']
     state: present
+    update_cache: true
 
-- name: configure vhosts
+- name: install apache modules
+  apache2_module:
+    name: "{{ item }}"
+    state: present
+  notify: restart apache
+  with_items:
+    - rewrite
+    - headers
+    - expires
+    - filter
+    - vhost_alias
+
+- name: check for update of config needed
+  lineinfile:
+    dest: "/etc/apache2/sites-available/000-default.conf"
+    line: "    DocumentRoot {{ apache.docroot }}"
+    state: present
+  check_mode: true
+  register: update_config
+
+- name: modify the default apache site
   template:
-    src: vhost.conf.j2
-    dest: "{{ httpd_config_directory }}/{{ item.name }}.conf"
-    mode: "0644"
-  loop: "{{ httpd_vhosts }}"
-  notify:
-    - test httpd configuration validity
-    - restart httpd
-  when:
-    - httpd_vhosts is defined
-  loop_control:
-    label: "{{ item.name }}"
-
-- name: configure httpd
-  template:
-    src: "{{ httpd_config_src }}"
-    dest: "{{ httpd_config_dest }}"
-    mode: "0644"
-  notify:
-    - test httpd configuration validity
-    - restart httpd
-
-- name: configure listening ports
-  template:
-    src: "{{ httpd_ports_conf }}.j2"
-    dest: "{{ httpd_server_root }}/{{ httpd_ports_conf }}"
-    mode: "0644"
-  notify:
-    - test httpd configuration validity
-    - restart httpd
-
-- name: create docroot
-  file:
-    path: "{{ item.documentroot }}"
-    state: directory
-    mode: "0755"
-  loop: "{{ httpd_vhosts }}"
-  when:
-    - httpd_vhosts is defined
-    - item.documentroot is defined
-
-- name: start and enable httpd
-  service:
-    name: "{{ httpd_service }}"
-    state: started
-    enabled: yes
+    src: "vhost.conf.j2"
+    dest: "/etc/apache2/sites-available/000-default.conf"
+  when: update_config.msg == "line added" or force_vhosts_update
+  notify: restart apache

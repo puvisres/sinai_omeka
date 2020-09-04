@@ -1,5 +1,6 @@
 ---
+# handlers file for roles/pulibrary.percona
 - name: restart mysql server
   service:
-    name: "{{ mysql_service }}"
+    name: mysql
     state: restarted

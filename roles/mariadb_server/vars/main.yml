@@ -1,12 +1,12 @@
 ---
-mariadbserver_packages:
-  - mariadb-server
-  - libmariadb-dev
+# vars file for roles/pulibrary.percona
+percona_packages:
+  - percona-server-server-5.7
+  - libssl-dev
   - python3-mysqldb
-mysql_initialize_command: mysql_install_db
-mysql_service: mariadb
-mysql_socket: /var/run/mysqld/mysql.sock
-mysql_pid: /var/run/mysqld/mysql.pid
+  - python-pymysql
+mysql_socket: "/var/run/mysqld/mysqld.sock"
+mysql_pid: "/var/run/mysqld/mysql.pid"
 mysql_configuration_options:
   - option: bind-address
     section: mysqld

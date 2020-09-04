@@ -4,6 +4,7 @@ omeka_required:
   - php-pdo-mysql
   - php-xml
   - php-imagick
+  - php-mbstring
   - unzip
 web_root: "/var/www/html"
 omeka_web_root: "/var/www"
