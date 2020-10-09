@@ -1,5 +1,5 @@
 # do not commit the bastion host
 group_vars/gcp/dev.yml
 
-# do not commit the mariadbserver
-group_vars/mariadbserver/dev.yml
+# do not commit the mariadbserver variables
+group_vars/perconadb/dev.yml

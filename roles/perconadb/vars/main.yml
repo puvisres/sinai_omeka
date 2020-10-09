@@ -1,0 +1,9 @@
+---
+repository_url: "https://repo.percona.com/apt/percona-release_latest."
+mysql_service: "mysql"
+percona_server:
+  - percona-server-server-5.7
+  - python3-pymysql
+  - python-pymysql
+
+    #mysql_user_home: "{{ ansible_env.HOME}}"

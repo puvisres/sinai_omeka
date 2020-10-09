@@ -1,0 +1,52 @@
+---
+- name: perconadb | default user is present.
+  mysql_user:
+    name: "{{ mysql_user_name }}"
+    host: 'localhost'
+    password: "{{ mysql_user_password }}"
+    priv: '*.*:ALL,GRANT'
+    state: present
+  when: mysql_user_name != mysql_root_username
+
+- name: perconadb | install .my.cnf with credentials
+  template:
+    src: "my.cnf.j2"
+    dest: "{{ mysql_user_home }}/.my.cnf"
+    mode: "0400"
+
+- name: Get list of hosts for the root user.
+  command: mysql -NBe
+    "SELECT Host
+    FROM mysql.user
+    WHERE User = '{{ mysql_root_username }}'
+    ORDER BY (Host='localhost') ASC"
+  register: mysql_root_hosts
+  changed_when: false
+  check_mode: false
+
+- name: perconadb | Update MySQL root password for localhost root account (5.7.x).
+  shell: >
+    mysql -u root -NBe
+    'ALTER USER "{{ mysql_root_username }}"@"{{ item }}"
+    IDENTIFIED WITH mysql_native_password BY "{{ mysql_root_password }}";'
+  with_items: "{{ mysql_root_hosts.stdout_lines|default([]) }}"
+
+- name: Copy .my.cnf file with root password credentials.
+  template:
+    src: "my.cnf.j2"
+    dest: "{{ mysql_root_home }}/.my.cnf"
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Remove anonymous MySQL users.
+  mysql_user:
+    name: ""
+    host: "{{ item }}"
+    state: absent
+  with_items: "{{ mysql_anonymous_hosts.stdout_lines|default([]) }}"
+
+- name: Remove MySQL test database.
+  mysql_db:
+    name: "test"
+    state: absent
