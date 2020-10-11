@@ -1,0 +1,10 @@
+---
+# handlers file for apache
+- name: test apache configuration validity
+  command: "{{ apache_binary }} -t"
+  changed_when: no
+
+- name: restart apache
+  service:
+    name: "{{ apache_service }}"
+    state: restarted

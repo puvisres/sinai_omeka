@@ -1,0 +1,11 @@
+{{ ansible_managed | comment }}
+
+LoadModule rewrite_module {{ apache_modules_path }}/mod_rewrite.so
+
+<VirtualHost *:{{ apache_port }}>
+   ServerName {{ apache_servername }}
+   DocumentRoot "{{ apache_data_directory }}"
+   RewriteEngine On
+   RewriteCond %{HTTPS} !=on
+   RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+</VirtualHost>

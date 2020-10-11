@@ -1,0 +1,72 @@
+---
+# tasks file for apache
+- name: apache | install apache
+  apache:
+    name: "{{ apache_packages }}"
+    state: present
+    update_cache: true
+
+- name: apache | configure locations
+  template:
+    src: location.conf.j2
+    dest: "{{ httpd_config_directory }}/{{ item.name }}.conf"
+    mode: "0644"
+  loop: "{{ apache_locations }}"
+  notify:
+    - test apache configuration validity
+    - restart apache
+  when:
+    - apache_locations is defined
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: apache | configure vhosts
+  template:
+    src: vhost.conf.j2
+    dest: "{{ apache_config_directory }}/{{ item.name }}.conf"
+    mode: "0644"
+  loop: "{{ apache_vhosts }}"
+  notify:
+    - test apache configuration validity
+    - restart apache
+  when:
+    - apache_vhosts is defined
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: apache | configure apache
+  template:
+    src: "{{ apache_config_src }}"
+    dest: "{{ apache_config_dest }}"
+    mode: "0644"
+  notify:
+    - test apache configuration validity
+    - restart apache
+
+- name: apache | configure listening ports
+  template:
+    src: "{{ apache_ports_conf }}.j2"
+    dest: "{{ apache_server_root }}/{{ apache_ports_conf }}"
+    mode: "0644"
+  notify:
+    - test apache configuration validity
+    - restart apache
+
+- name: apache | create docroot
+  file:
+    path: "{{ item.documentroot }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ apache_vhosts }}"
+  when:
+    - apache_vhosts is defined
+    - item.documentroot is defined
+
+- name: flush handlers
+  meta: flush_handlers
+
+- name: apache | start and enable httpd
+  service:
+    name: "{{ apache_service }}"
+    state: started
+    enabled: true

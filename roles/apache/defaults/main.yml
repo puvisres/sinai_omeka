@@ -1,0 +1,23 @@
+---
+# defaults file for apache
+
+# The servername to use.
+apache_servername: "{{ ansible_fqdn }}"
+
+# The non-SSL port to use.
+apache_port: 80
+
+# To configure https, set the hostname to listen to.
+apache_ssl_servername: "{{ ansible_fqdn }}"
+
+# For SSL a TCP port is required.
+apache_ssl_port: 443
+
+# Set ProxyPreserveHost
+apache_proxy_preserve_host: On
+
+# SSL Certificate:
+apache_openssl_crt: "{{ apache_openssl_crt_directory }}/apache-apache.crt"
+
+# SSL Key
+apache_openssl_key: "{{ apache_openssl_key_directory }}/apache-apache.key"
