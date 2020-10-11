@@ -1,0 +1,15 @@
+---
+# vars file for apache
+apache_packages:
+  - apache2
+apache_service: "apache2"
+apache_server_root: "/etc/apache2"
+apache_config_directory: "{{ apache_server_root }}/conf-enabled"
+apache_config_src: "apache2.conf.j2"
+apache_config_dest: "{{ apache_server_root }}/httpd.conf"
+apache_ports_conf: "ports.conf"
+apache_data_directory: "/var/www/html"
+apache_modules_path: "/usr/lib/apache2/modules"
+apache_binary: "apachectl"
+apache_openssl_key_directory: "/etc/ssl/private"
+apache_openssl_crt_directory: "/etc/ssl/certs"
