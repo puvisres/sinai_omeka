@@ -1,10 +1,9 @@
 ---
 # tasks file for php
 - name: php | install php
-  apt:
+  package:
     name: "{{ php_packages }}"
     state: present
-    update_cache: true
 
 - name: php | configure php
   ini_file:
@@ -18,4 +17,3 @@
     - restart apache
   loop_control:
     label: "{{ item.key }}"
-

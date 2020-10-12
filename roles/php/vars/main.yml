@@ -1,6 +1,10 @@
 ---
+<<<<<<< HEAD
 # vars file for php
 php_packages:
   - php
 
+=======
+php_packages: "php"
+>>>>>>> a2d5f7d4254b8cec6821eb29c5eba99f9a0cb24d
 php_ini_location: "/etc/php.ini"

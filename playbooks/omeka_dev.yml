@@ -1,4 +1,5 @@
 ---
+
 - hosts: percona
   remote_user: pulsys
   become: true
@@ -7,3 +8,13 @@
     - ../group_vars/perconadb/dev.yml
   roles:
     - role: ../roles/perconadb
+
+- hosts: omekaapp
+  remote_user: pulsys
+  become: true
+  vars_files:
+    - ../group_vars/gcp/dev.yml
+    - ../group_vars/perconadb/dev.yml
+    - ../group_vars/omeka/dev.yml
+  roles:
+    - role: ../roles/omeka

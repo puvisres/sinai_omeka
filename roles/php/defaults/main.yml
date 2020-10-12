@@ -58,4 +58,3 @@ php_settings:
   memory_limit:
     section: PHP
     value: 128M
-

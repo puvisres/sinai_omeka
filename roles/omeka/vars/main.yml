@@ -8,5 +8,7 @@ omeka_dependencies:
   - php7.2-json
   - php7.2-mbstring
   - php7.2-opcache
+  - php-pdo-mysql
   - php7.2-readline
+  - unzip
 omeka_url: "https://github.com/omeka/omeka-s/releases/download"

@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 # tasks file for omeka
 #
 - name: omeka | install php dependencies
@@ -14,3 +15,55 @@
     src: "{{ omeka_url }}/v{{ omeka_version }}/omeka-s-{{ omeka_version }}.zip"
     dest: "/var/www/"
     remote_src: true
+=======
+- name: omeka | install pre-required software
+  apt:
+    name: "{{ omeka_required }}"
+    state: present
+    update_cache: true
+
+- name: omeka | enable mod_rewrite
+  apache2_module:
+    state: present
+    name: rewrite
+  notify:
+    - restart apache
+
+- name: omeka | register downloaded
+  stat:
+    path: "{{ omeka_web_root }}"
+  register: omeka_downloaded
+
+- name: omeka | download release
+  unarchive:
+    src: "https://github.com/omeka/omeka-s/releases/download/v{{ omeka_version }}/omeka-s-{{ omeka_version
+     }}.zip"
+    dest: "{{ omeka_web_root }}"
+    remote_src: true
+  when: not omeka_downloaded.stat.exists
+
+- name: omeka | copy {{ vrcomekadev }} directory
+  synchronize:
+    src: "{{ omeka_web_root }}/omeka-s"
+    dest: "{{ vrcomekadev_home }}"
+  delegate_to: "{{ inventory_hostname }}"
+
+- name: omeka | copy {{ visresdemo }} directory
+  synchronize:
+    src: "{{ omeka_web_root }}/omeka-s"
+    dest: "{{ visresdemo_home }}"
+  delegate_to: "{{ inventory_hostname }}"
+
+- name: omeka | create {{ vrcomeka }} config
+  template:
+    src: database.ini.j2
+    dest: "{{ vrcomekadev_home }}/omeka-s/config/database.ini"
+
+- name: omeka | grant permissions for file directory
+  file:
+    path: "{{ vrcomekadev_home }}/omeka-s/files"
+    owner: "www-data"
+    group: "www-data"
+  notify:
+    - restart apache
+>>>>>>> a2d5f7d4254b8cec6821eb29c5eba99f9a0cb24d
