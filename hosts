@@ -1,4 +1,6 @@
-[all]
+[database]
 vrc_maria_dev1 ansible_host=10.0.10.21
 [percona]
 vrc_percona_dev1 ansible_host=10.0.30.8
+[omekaapp]
+vrc_omeka_demo2 ansible_host=10.0.30.9

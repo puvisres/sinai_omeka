@@ -1,0 +1,34 @@
+---
+httpd_vhosts:
+  - name: vrcomekadev
+    servername: vrcomekadev.pulcloud.io
+    documentroot: "{{ vrcomekadev_home }}"
+  - name: visresdemo
+    servername: visresdemo.pulcloud.io
+    documentroot: "{{ visresdemo_home }}"
+
+vrcomekadev_home: "/var/www/html/vrcomekadev/omeka-s"
+visresdemo_home: "/var/www/html/visresdemo"
+
+apache_app_path: "{{ vrcomekadev_home }}"
+
+force_vhosts_update: true
+
+apache_app_path: "{{ vrcomekadev_home }}"
+omeka_db: "{{ vrcomeka_db }}"
+omeka_password: "{{ vrcomeka_password }}"
+omeka_user: "{{ vrcomeka_user }}"
+omeka_db_host: 10.0.10.21
+mariadb__server: "{{ omeka_db_host }}"
+
+
+mysql_databases:
+  - name: "{{ omeka_db }}"
+    encoding: utf8
+    collation: utf8_bin
+mysql_users:
+  - name: "{{ omeka_user }}"
+    password: "{{ omeka_password }}"
+    priv: "{{ omeka_db }}.*:ALL,GRANT"
+    host: "{{ mariadb__server }}"
+    state: present

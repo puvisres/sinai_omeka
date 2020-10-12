@@ -43,4 +43,3 @@ ProxyPass / {{ item.backend_url }}
    SetEnv {{ env.name }} {{ env.value | default("") }}
 {% endfor %}
 {% endif %}
-</VirtualHost>

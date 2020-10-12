@@ -1,6 +1,4 @@
 ---
-# defaults file for apache
-
 # The servername to use.
 apache_servername: "{{ ansible_fqdn }}"
 

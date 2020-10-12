@@ -1,7 +1,7 @@
 ---
 # tasks file for apache
 - name: apache | install apache
-  apache:
+  apt:
     name: "{{ apache_packages }}"
     state: present
     update_cache: true
