@@ -1,0 +1,31 @@
+---
+- name: omeka_site | enable mod_rewrite
+  apache2_module:
+    state: present
+    name: rewrite
+  notify:
+    - restart apache
+
+- name: omeka | register downloaded
+  stat:
+    path: "{{ omeka_site_root }}"
+  register: omeka_downloaded
+
+- name: omeka | copy {{ vrcomekadev }} directory
+  synchronize:
+    src: "{{ omeka_web_root }}"
+    dest: "{{ vrcomekadev_home }}"
+  delegate_to: "{{ inventory_hostname }}"
+
+- name: omeka | create {{ vrcomeka }} config
+  template:
+    src: database.ini.j2
+    dest: "{{ vrcomekadev_home }}/omeka-s/config/database.ini"
+
+- name: omeka | grant permissions for file directory
+  file:
+    path: "{{ vrcomekadev_home }}/omeka-s/files"
+    owner: "www-data"
+    group: "www-data"
+  notify:
+    - restart apache

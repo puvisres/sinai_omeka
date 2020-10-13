@@ -2,11 +2,11 @@
 
 {% if item.backend_url is defined %}
 <IfModule !proxy_module>
-   LoadModule proxy_module {{ apache_modules_path }}/mod_proxy.so
+   LoadModule proxy_module {{ httpd_modules_path }}/mod_proxy.so
 </IfModule>
 
 <IfModule !proxy_http_module>
-   LoadModule proxy_http_module {{ apache_modules_path }}/mod_proxy_http.so
+   LoadModule proxy_http_module {{ httpd_modules_path }}/mod_proxy_http.so
 </IfModule>
 {% endif %}
 
@@ -43,3 +43,4 @@ ProxyPass / {{ item.backend_url }}
    SetEnv {{ env.name }} {{ env.value | default("") }}
 {% endfor %}
 {% endif %}
+</VirtualHost>

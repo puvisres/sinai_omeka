@@ -9,8 +9,13 @@
   notify:
     - restart apache
 
+- name: omeka | register downloaded
+  stat:
+    path: "{{ omeka_web_root }}"
+  register: omeka_downloaded
+
 - name: omeka | unarchive omeka
   unarchive:
     src: "{{ omeka_url }}/v{{ omeka_version }}/omeka-s-{{ omeka_version }}.zip"
-    dest: "/var/www/"
+    dest: "{{ web_root }}"
     remote_src: true

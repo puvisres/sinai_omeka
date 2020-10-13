@@ -4,7 +4,8 @@ apache_packages:
   - apache2
 apache_service: "apache2"
 apache_server_root: "/etc/apache2"
-apache_config_directory: "{{ apache_server_root }}/conf-enabled"
+apache_config_directory: "{{ apache_server_root }}/sites-available"
+apache_config_active_directory: "{{ apache_server_root }}/sites-enabled"
 apache_config_src: "apache2.conf.j2"
 apache_config_dest: "{{ apache_server_root }}/httpd.conf"
 apache_ports_conf: "ports.conf"
