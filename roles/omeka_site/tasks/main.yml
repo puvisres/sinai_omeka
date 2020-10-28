@@ -11,21 +11,33 @@
     path: "{{ omeka_site_root }}"
   register: omeka_downloaded
 
-- name: omeka | copy {{ vrcomekadev }} directory
+- name: omeka | copy {{ item }} directory
   synchronize:
     src: "{{ omeka_web_root }}"
-    dest: "{{ vrcomekadev_home }}"
+    dest: "{{ item.documentroot }}"
+  with_items:
+    - "{{ apache_vhosts }}"
   delegate_to: "{{ inventory_hostname }}"
 
-- name: omeka | create {{ vrcomeka }} config
+- name: omeka | create {{ item }} config
   template:
     src: database.ini.j2
-    dest: "{{ vrcomekadev_home }}/omeka-s/config/database.ini"
+    dest: "{{ item.documentroot }}/omeka-s/config/database.ini"
+  with_items:
+    - "{{ apache_vhosts }}"
 
 - name: omeka | grant permissions for file directory
   file:
-    path: "{{ vrcomekadev_home }}/omeka-s/files"
+    path: "{{ item.documentroot }}/omeka-s/files"
     owner: "www-data"
     group: "www-data"
+  with_items:
+    - "{{ apache_vhosts }}"
   notify:
     - restart apache
+
+- name: omeka | add modules
+  include_tasks: modules.yml
+
+- name: omeka | add theme
+  include_tasks: theme.yml

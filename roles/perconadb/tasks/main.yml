@@ -30,7 +30,7 @@
     target: "{{ item.target | default(omit) }}"
     encoding: "{{ item.encoding | default(omit) }}"
     collation: "{{ item.collation | default(omit) }}"
-    login_unix_socket: "{{ mysql_socket }}"
+    #login_unix_socket: "{{ mysql_socket }}"
   loop: "{{ mysql_databases }}"
   loop_control:
     label: "{{ item.name }}"
@@ -45,13 +45,13 @@
     priv: "{{ item.priv | default(omit) }}"
     host: "{{ item.host | default(omit) }}"
     update_password: "{{ item.update_password | default('on_create') }}"
-    login_unix_socket: "{{ mysql_socket }}"
+    #login_unix_socket: "{{ mysql_socket }}"
   loop: "{{ mysql_users }}"
   loop_control:
     label: "{{ item.name }}"
   when:
     - mysql_users is defined
-  no_log: yes
+  no_log: false
 
 - name: flush handlers
   meta: flush_handlers

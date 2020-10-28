@@ -1,0 +1,128 @@
+---
+- name: install blocks disposition module
+  unarchive:
+    src: "{{ block_disposition_dl_url }}/{{ block_dispostion_version }}/BlocksDisposition-{{ block_dispostion_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install css editor module
+  unarchive:
+    src: "{{csseditor_dl_url }}/v{{ csseditor_version }}/CSSEditor-v{{ csseditor_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install csv import module
+  unarchive:
+    src: "{{ csvimport_dl_url }}/v{{ csvimport_version }}/CSVImport-{{ csvimport_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install custom vocabulary module
+  unarchive:
+    src: "{{ custom_vocab_dl_url }}/v{{ custom_vocab_version }}/CustomVocab-{{ custom_vocab_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install file sideload module
+  unarchive:
+    src: "{{ filesideload_dl_url }}/v{{ filesideload_version }}/FileSideload-{{ filesideload_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install folksonomy module
+  unarchive:
+    src: "{{ folksonomy_dl_url }}/{{ folksonomy_version }}/Folksonomy-{{ folksonomy_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install iiifserver module
+  unarchive:
+    src: "{{ iiifserver_dl_url }}/{{ iiifserver_version }}/IiifServer-{{ iiifserver_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install libnamic omeka module
+  unarchive:
+    src: "{{ ga_dl_url }}/v{{ ga_version }}/LibnamicOmekaSGA.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install mapping module
+  unarchive:
+    src: "{{ mapping_dl_url }}/v{{ mapping_version }}/Mapping-{{ mapping_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install metadata browse module
+  unarchive:
+    src: "{{ metadatabrowse_dl_url }}/v{{ metadatabrowse_version }}/MetadataBrowse-{{ metadatabrowse_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install mirador module
+  unarchive:
+    src: "{{ mirador_dl_url }}/{{ mirador_version }}/Mirador-{{ mirador_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install omeka2importer module
+  unarchive:
+    src: "{{ omeka2importer_dl_url }}/v{{ omeka2importer_version }}/Omeka2Importer-{{ omeka2importer_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install pdfembed module
+  unarchive:
+    src: "{{ pdfembed_dl_url }}/v{{ pdfembed_version }}/PdfEmbed-{{ pdfembed_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install search module
+  unarchive:
+    src: "{{search_dl_url }}/v{{ search_version }}/Search-{{ search_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install unapi module
+  unarchive:
+    src: "{{ unapi_dl_url }}/v{{ unapi_version }}/UnApi-{{ unapi_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: install universal viewer module
+  unarchive:
+    src: "{{ uv_dl_url }}/{{ uv_version }}/UniversalViewer-{{ uv_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/modules/"
+    remote_src: true
+  with_items:
+    - "{{ apache_vhosts }}"

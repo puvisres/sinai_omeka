@@ -5,6 +5,7 @@
   vars_files:
     - ../group_vars/gcp/dev.yml
     - ../group_vars/perconadb/dev.yml
+    - ../group_vars/vrcomeka/dev.yml
   roles:
     - role: ../roles/perconadb
 
