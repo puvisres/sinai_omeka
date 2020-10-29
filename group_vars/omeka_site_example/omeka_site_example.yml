@@ -1,0 +1,29 @@
+---
+apache_vhosts:
+  - name: "newomekasite"
+    servername: newomekasite.awesomesite.io
+    documentroot: "{{ sitename_home }}newomekasite/omeka-s"
+
+sitename_home: "/var/www/html/"
+apache_app_path: "{{ sitename_home }}"
+omeka_site_root: "/var/www/omeka-s"
+
+omeka_db_host: "1.2.3.4"
+
+connection_details:
+  - {omeka_user: newomekasite_user1, omeka_password: complexP4ss, omeka_db: newomekasite_db1}
+
+mysql_databases:
+  - name: "newomekasite_db1"
+    encoding: utf8
+    collation: utf8_bin
+    login_user: root
+    login_password: Change_me!
+    login_host: "{{ omeka_db_host }}"
+mysql_users:
+  - name: "newomekasite_user1"
+    password: "complexP4ss"
+    priv: "vrcdemo_db1.*:ALL,GRANT"
+    login_user: root
+    login_password: Change_me!
+    login_host: "{{ omeka_db_host }}"

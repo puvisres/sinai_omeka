@@ -1,0 +1,8 @@
+---
+apache_vhosts:
+  - name: sitename
+    servername: sitename.awesomesite.io
+    documentroot: "{{ sitename_home }}"
+
+sitename_home: "/var/www/html/sitename"
+apache_app_path: "{{ sitename_home }}"

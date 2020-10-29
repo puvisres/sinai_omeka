@@ -1,0 +1,9 @@
+{% for item in connection_details %}
+user     = "{{ item.omeka_user }}"
+password = "{{ item.omeka_password }}"
+dbname   = "{{ item.omeka_db }}"
+{% endfor %}
+host     = "{{ omeka_db_host }}"
+;port     =
+;unix_socket =
+;log_path =

@@ -2,3 +2,4 @@
 ansible_distribution_release: "bionic"
 mysql_user_home: "{{ ansible_env.HOME}}"
 mysql_user_name: root
+mysql_socket: "/var/run/mysql/mysql.sock"

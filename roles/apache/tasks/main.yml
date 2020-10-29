@@ -34,14 +34,19 @@
   loop_control:
     label: "{{ item.name }}"
 
-- name: apache | configure apache
-  template:
-    src: "{{ apache_config_src }}"
-    dest: "{{ apache_config_dest }}"
-    mode: "0644"
+- name: apache | enable apache
+  file:
+    src: "{{ apache_config_directory }}/{{ item.name }}.conf"
+    dest: "{{ apache_config_active_directory }}/{{ item.name }}.conf"
+    state: link
+  loop: "{{ apache_vhosts }}"
   notify:
     - test apache configuration validity
     - restart apache
+  when:
+    - apache_vhosts is defined
+  loop_control:
+    label: "{{ item.name }}"
 
 - name: apache | configure listening ports
   template:

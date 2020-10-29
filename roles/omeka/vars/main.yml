@@ -12,3 +12,5 @@ omeka_dependencies:
   - php7.2-readline
   - unzip
 omeka_url: "https://github.com/omeka/omeka-s/releases/download"
+web_root: "/var/www"
+omeka_web_root: "/var/www/omeka-s"

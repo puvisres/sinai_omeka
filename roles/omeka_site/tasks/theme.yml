@@ -1,0 +1,8 @@
+---
+- name: install center arrow theme
+  unarchive:
+    src: "{{ centerarrow_dl_url }}/v{{ centerarrow_version }}/theme-centerarrow-v{{ centerarrow_version }}.zip"
+    dest: "{{ item.documentroot }}/omeka-s/themes/"
+    remote_src: true
+  with_items:
+    - dest: "{{ apache_vhosts }}"

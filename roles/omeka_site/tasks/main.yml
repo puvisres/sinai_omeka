@@ -1,0 +1,43 @@
+---
+- name: omeka_site | enable mod_rewrite
+  apache2_module:
+    state: present
+    name: rewrite
+  notify:
+    - restart apache
+
+- name: omeka | register downloaded
+  stat:
+    path: "{{ omeka_site_root }}"
+  register: omeka_downloaded
+
+- name: omeka | copy {{ item }} directory
+  synchronize:
+    src: "{{ omeka_web_root }}"
+    dest: "{{ item.documentroot }}"
+  with_items:
+    - "{{ apache_vhosts }}"
+  delegate_to: "{{ inventory_hostname }}"
+
+- name: omeka | create {{ item }} config
+  template:
+    src: database.ini.j2
+    dest: "{{ item.documentroot }}/omeka-s/config/database.ini"
+  with_items:
+    - "{{ apache_vhosts }}"
+
+- name: omeka | grant permissions for file directory
+  file:
+    path: "{{ item.documentroot }}/omeka-s/files"
+    owner: "www-data"
+    group: "www-data"
+  with_items:
+    - "{{ apache_vhosts }}"
+  notify:
+    - restart apache
+
+- name: omeka | add modules
+  include_tasks: modules.yml
+
+- name: omeka | add theme
+  include_tasks: theme.yml
