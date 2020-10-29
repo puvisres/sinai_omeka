@@ -1,9 +1,0 @@
----
-mysql_bind_address: "10.0.30.8"
-mysql_root_password: "Change_me!"
-mysql_user_home: "/root"
-mysql_user_name: "root"
-mysql_root_username: "root"
-mysql_root_home: "/root"
-mysql_user_password: "Change_me!"
-mysql_allow_from: "10.0.10.24"

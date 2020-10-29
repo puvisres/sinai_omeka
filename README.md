@@ -1,6 +1,8 @@
 # Ansible Role for Sinai Omeka
 
-This repository contains an ansible playbook for provisioning an [Omeka-S](https://omeka.org) based server with both a production and staging website.
+This repository contains an ansible playbook for provisioning an [Omeka-S](https://omeka.org) based server with both a production and staging website. 
+
+Clone this repository
 
 > Note: currently this is oriented towards a Ubuntu.
 
@@ -26,7 +28,7 @@ Make sure that whatever machine you are connecting from as the ansible host has 
 
 It is assumed there's already some familiarity with how [Ansible](https://ansible.com) works.
 
-### 2. Add your new server to `hosts` 
+### 2. Copy `hosts.example` to `hosts` and modify it to match the new server(s)
 
 ### 3. Copy any thing with `*_example.yml` to a new file called `your_site.yml` and add your own values for the variables.
 

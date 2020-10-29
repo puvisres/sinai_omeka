@@ -7,3 +7,5 @@ group_vars/perconadb/dev.yml
 group_vars/mariadbserver/dev.yml
 # do not commit vrcomeka dev
 group_vars/vrcomeka/dev.yml
+# hide hosts
+hosts
