@@ -1,6 +1,6 @@
 ---
 block_disposition_dl_url: "https://github.com/Daniel-KM/Omeka-S-module-BlocksDisposition/releases/download/"
-centerarrow_dl_url: "https://github.com/omeka-s-themes/centerrow/releases/download/"
+centerrow_dl_url: "https://github.com/omeka-s-themes/centerrow/releases/download/"
 csseditor_dl_url: "https://github.com/omeka-s-modules/CSSEditor/releases/download/"
 csvimport_dl_url: "https://github.com/omeka-s-modules/CSVImport/releases/download/"
 custom_vocab_dl_url: "https://github.com/omeka-s-modules/CustomVocab/releases/download/"

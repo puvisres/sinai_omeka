@@ -34,11 +34,17 @@ It is assumed there's already some familiarity with how [Ansible](https://ansibl
 
 So for example we use a bastion host so go to [group_vars/gcp/bastion_example.yml](group_vars/gcp/bastion_example.yml) with a phony IP address. Create a copy of that file and make a new one that contains your bastion host
 
-### 4. Change anything with `*_example.yml` on `playbooks/omeka_sites_example.yml` to your own newly created files.
+### 4 Create a new directory for your new site's variables with by using the `omeka_site_example`
+
+rename the file in your new directory to say `sitename.yml`
+
+### 5. Change anything with `*_example.yml` on `playbooks/omeka_sites_example.yml` to your own newly created files.
 
 You are best served to make a copy of of `playbooks/omeka_sites_example.yml` into a new file. Make sure the new file refers to the correct variable files and not the ones that contain `example` in there
 
-### 5. Execute ansible.
+
+
+### 6. Execute ansible.
 
 Run your new playbook by doing this:
 
