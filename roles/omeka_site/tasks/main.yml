@@ -35,7 +35,22 @@
     - "{{ apache_vhosts }}"
   notify:
     - restart apache
-
+    
+- name: omeka | alias for the libstatic site
+  template:
+    src: "omeka_site.conf.j2"
+    dest: "/etc/apache2/sites-available/omeka_site.conf"
+  become: true
+  
+- name: omeka | enable apache2 sites
+  command: 'a2ensite omeka_site.conf'
+  
+- name: disable the default apache2 site
+  command: 'a2dissite 000-default'
+  notify:
+    - restart apache
+  become: true
+  
 - name: omeka | add modules
   include_tasks: modules.yml
 

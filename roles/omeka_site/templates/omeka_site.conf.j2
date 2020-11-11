@@ -1,0 +1,11 @@
+<VirtualHost *:80>
+ServerAdmin webmaster@localhost
+DocumentRoot "{{ omeka_site_home }}"
+
+<Directory "{{ omeka_site_home }}">
+	AllowOverride All
+	Options -Indexes +FollowSymLinks
+	Require all granted
+
+</Directory>
+</VirtualHost>
